@@ -1,5 +1,6 @@
 from random import choice
 from classes import Game
+
 command = input().split()
 print('Input command: '+ ' '.join(command))
 while ' '.join(command) != 'exit':
@@ -36,7 +37,7 @@ while ' '.join(command) != 'exit':
                     if player1.check_input(x,y,elements) == None:
                         x = int(x)
                         y = int(y)
-                        elements = player1.move(x,y,elements)
+                        elements = player1.move(elements, 'user', x, y)
                         for row in game.board(elements):
                             print(row)
                         correct = True
@@ -45,8 +46,8 @@ while ' '.join(command) != 'exit':
                 except ValueError:
                     print('You should enter numbers!')
         else:
-            print('Making move level "easy"')
-            elements = player1.move(*choice(player1.free_cells(elements)), elements)
+            print('Making move level "{player2.level}"')
+            elements = player1.move(elements = elements, level = player1.level)
             for row in game.board(elements):
                 print(row)
         if player1.free_cells(elements) != [] and game.check_win(elements) == None:
@@ -56,11 +57,11 @@ while ' '.join(command) != 'exit':
                 while correct == False:
                     try:
                         x,y = input().split()
-                        print('Enter the coordinates: '+x+' '+y)
+                        print('Enter the coordinates: ' + x + ' ' + y)
                         if player2.check_input(x,y,elements) == None:
                             x = int(x)
                             y = int(y)
-                            elements = player2.move(x,y,elements)
+                            elements = player2.move(elements, 'user', x, y)
                             for row in game.board(elements):
                                 print(row)
                             correct = True
@@ -69,8 +70,8 @@ while ' '.join(command) != 'exit':
                     except ValueError:
                         print('You should enter numbers!')
             else:
-                print('Making move level "easy"')
-                elements = player2.move(*choice(player2.free_cells(elements)), elements)
+                print('Making move level "{player2.level}"')
+                elements = player2.move(elements = elements, level = player2.level)
                 for row in game.board(elements):
                     print(row)
     if game.check_win(elements) != None:

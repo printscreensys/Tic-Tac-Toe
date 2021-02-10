@@ -1,3 +1,5 @@
+from random import choice
+
 class Game:
     def __init__(self, command, level1, level2):
         self.command = command
@@ -55,9 +57,38 @@ class Game:
             else:
                 return 'You should enter numbers!'
             
-        def move(self, x, y, elements):
-            elements[x-1][y-1] = self.side
- 
+        def move(self, elements, level, x = None, y = None,):
+            if self.level == 'user':
+                elements[x-1][y-1] = self.side
+            if self.level == 'easy':
+                x,y = choice(self.free_cells(elements))
+                elements[x-1][y-1] = self.side
+            if self.level == 'medium':
+                can_win = None
+                can_block = None
+                for cell in self.free_cells(elements):
+                    x,y = cell
+                    virtual = elements
+                    virtual[x-1][y-1] = self.side
+                    if Game.check_win(self, virtual) != None:
+                        elements[x-1][y-1] = self.side
+                        can_win = True
+                        break
+                    else:
+                        elements[x-1][y-1] = ' '
+                        x,y = cell
+                        virtual = elements
+                        virtual[x-1][y-1] = 'X' if self.side == 'O' else 'X'
+                        if Game.check_win(self, virtual) != None:
+                            can_block = True
+                            elements[x-1][y-1] = self.side
+                            break
+                        elements[x-1][y-1] = ' ' 
+                if not (can_win or can_block):
+                    x,y = choice(self.free_cells(elements))
+                    elements[x-1][y-1] = self.side
+            if self.level == 'hard':
+                pass
             return elements
         
         def free_cells(self, elements):
@@ -68,3 +99,4 @@ class Game:
                         free_cells.append((i+1,j+1))
             
             return free_cells
+

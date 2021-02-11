@@ -9,9 +9,8 @@ while ' '.join(command) != 'exit':
     while not start:
         try:
             game = Game(*command)
-            elements = game.elements('_________')
-            for row in game.board(elements):
-                print(row)
+            elements = [[' ' for j in range(3)] for i in range(3)]
+            game.print_board(elements)
             start = True
         except TypeError:
             print('Bad parameters!')
@@ -35,21 +34,18 @@ while ' '.join(command) != 'exit':
                     x,y = input().split()
                     print('Enter the coordinates: '+x+' '+y)
                     if player1.check_input(x,y,elements) == None:
-                        x = int(x)
-                        y = int(y)
+                        x, y = int(x), int(y)
                         elements = player1.move(elements, 'user', x, y)
-                        for row in game.board(elements):
-                            print(row)
+                        game.print_board(elements)
                         correct = True
                     else:
                         print(player1.check_input(x,y,elements))
                 except ValueError:
                     print('You should enter numbers!')
         else:
-            print('Making move level "{player2.level}"')
+            print('Making move level "{}"'.format(player1.level))
             elements = player1.move(elements = elements, level = player1.level)
-            for row in game.board(elements):
-                print(row)
+            game.print_board(elements)
         if player1.free_cells(elements) != [] and game.check_win(elements) == None:
             if player2.level == 'user':
                 print('Enter the coordinates:')
@@ -59,21 +55,18 @@ while ' '.join(command) != 'exit':
                         x,y = input().split()
                         print('Enter the coordinates: ' + x + ' ' + y)
                         if player2.check_input(x,y,elements) == None:
-                            x = int(x)
-                            y = int(y)
+                            x, y = int(x), int(y)
                             elements = player2.move(elements, 'user', x, y)
-                            for row in game.board(elements):
-                                print(row)
+                            game.print_board(elements)
                             correct = True
                         else:
                             print(player2.check_input(x,y,elements))
                     except ValueError:
                         print('You should enter numbers!')
             else:
-                print('Making move level "{player2.level}"')
+                print('Making move level "{}"'.format(player2.level))
                 elements = player2.move(elements = elements, level = player2.level)
-                for row in game.board(elements):
-                    print(row)
+                game.print_board(elements)
     if game.check_win(elements) != None:
         print(game.check_win(elements)+' wins')
     else:
